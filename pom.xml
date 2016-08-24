@@ -1,0 +1,62 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.bsoft</groupId>
+	<artifactId>hip-wf</artifactId>
+	<version>2.0</version>
+
+	<properties>
+		<spring.version>3.2.1.RELEASE</spring.version>
+	</properties>
+
+	<dependencies>
+
+		<!-- JavaEE -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+		</dependency>
+
+		<!-- Freemarker -->
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.19</version>
+		</dependency>
+
+		<!-- Log4j -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+		</dependency>
+		<!-- dom4j -->
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+
+
+		<!-- ssdev-core -->
+		<dependency>
+			<groupId>com.bsoft</groupId>
+			<artifactId>ssdev-core</artifactId>
+			<version>2.3.4</version>
+		</dependency>
+
+		<!-- ssdev-rpc -->
+		<dependency>
+			<groupId>com.bsoft</groupId>
+			<artifactId>ssdev-rpc</artifactId>
+			<version>2.3.4</version>
+		</dependency>
+	</dependencies>
+
+	<distributionManagement>
+		<repository>
+			<id>nexus</id>
+			<url>http://172.16.171.250:9999/nexus/content/repositories/ssdev-release/</url>
+		</repository>
+	</distributionManagement>
+</project>
