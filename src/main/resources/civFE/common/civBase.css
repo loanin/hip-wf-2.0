@@ -1,0 +1,13 @@
+body {
+	margin: 0px;
+}
+
+.civComponent {
+	color: #333;
+	position: absolute;
+}
+
+.civMiddlePanel {
+	margin: 0 auto;
+	position: relative;
+}
