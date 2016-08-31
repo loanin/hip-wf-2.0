@@ -171,11 +171,11 @@
 					if ($tool.isArray(data.json.body)) {
 						var objs = [];
 						for (var i = 0; i < data.json.body.length; i++) {
-							objs.push(createObj(clas, data.json.body[i]));
+							objs.push($deserialize(clas, data.json.body[i]));
 						}
 						data.json.body = objs;
 					} else {
-						data.json.body = createObj(clas, data.json.body);
+						data.json.body = $deserialize(clas, data.json.body);
 					}
 				}
 			}
@@ -190,21 +190,21 @@
 			}
 		}
 
-		var createObj = function(clas, item) {
-			var obj = new clas();
-			// 赋值
-			for ( var k in item) {
-				var set = "set" + k.replace(/(\w)/, function(v) {
-					return v.toUpperCase()
-				});
-				if ($tool.isFunction(obj[set])) {
-					obj[set](item[k]);
-				} else {
-					obj[k] = item[k];
-				}
-			}
-			return obj;
-		}
+//		var createObj = function(clas, item) {
+//			var obj = new clas();
+//			// 赋值
+//			for ( var k in item) {
+//				var set = "set" + k.replace(/(\w)/, function(v) {
+//					return v.toUpperCase()
+//				});
+//				if ($tool.isFunction(obj[set])) {
+//					obj[set](item[k]);
+//				} else {
+//					obj[k] = item[k];
+//				}
+//			}
+//			return obj;
+//		}
 
 		ths.success = function(fun) {
 			successfun = fun;
