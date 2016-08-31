@@ -38,11 +38,11 @@ var $tool = new function() {
 	}
 }
 
-// var $addScript;
+var $addScript;
 var $addStyle;
-// var $addHtml;
+var $addHtml;
 var $import;
-// var $append;
+var $append;
 // resLoad~~~~~~~~~~~~~~~~~~~~~~~~~~
 (function() {
 	var addedCss = [];//   已经加载的css字符串
@@ -63,7 +63,7 @@ var $import;
 		}
 	}
 
-	var $append = function(dom, path, callback) { // 生成modid var modid = path;
+	$append = function(dom, path, callback) { // 生成modid var modid = path;
 		$import(path, function() {
 			var mod = $package(path, true);
 			if (mod) {// 处理css
@@ -124,12 +124,15 @@ var $import;
 				if (noGroupPath.length > 0)
 					$import(noGroupPath);
 				var groupIndex = 0;
+
 				function loadGroup() {
 					if (groupIndex == pathsGroup.length - 1)
 						$import(pathsGroup[groupIndex], callback);
 					else
-						$import(pathsGroup[groupIndex], loadGroup);
-					groupIndex++;
+						$import(pathsGroup[groupIndex], function() {
+							groupIndex++;
+							loadGroup();
+						})
 				}
 				loadGroup();
 				return;
@@ -221,11 +224,10 @@ var $import;
 	}
 })(this);
 
-// JS类定义过程~~~~~~~~~~~~~~~~~~~~~~~~~~
+// 类定义过程~~~~~~~~~~~~~~~~~~~~~~~~~~
 var $package;
 var $define;
 var $new;
-var $ref;
 var $extend;
 (function(global) {
 	var singletonClass = {};
@@ -286,13 +288,6 @@ var $extend;
 		return "";
 	}
 
-	$type = function(clsPath) {
-		if ($tool.isString(clsPath) && clsPath != "") {
-			return "$type:" + clsPath;
-		}
-		return "";
-	}
-
 	var defineMap = {};
 	$define = function(pkg, config) {
 		if ($tool.isString(pkg) && pkg == "")
@@ -309,28 +304,23 @@ var $extend;
 		var npkg = pkg.substring(0, pkg.length - name.length - 1);
 
 		var refList = [];
-		var refCls = [];
+		var refCls = "";
 		// 处理ref
 		for ( var k in config) {
 			if ($tool.isString(config[k]) && config[k].length > 5 && config[k].substring(0, 5) == "$ref:") {
-				// if (refCls != "")
-				// refCls += ";";
+				if (refCls != "")
+					refCls += ";";
 				var refs = config[k].substring(5, config[k].length);
-				refCls.push(refs);
+				refCls += refs;
 				refList.push({
 					k : k,
 					v : refs
 				});
 				config[k].undefined;
 			}
-			if ($tool.isString(config[k]) && config[k].length > 6 && config[k].substring(0, 6) == "$type:") {
-				var refs = config[k].substring(6, config[k].length);
-				refCls.push(refs);
-			}
 		}
-		if (refCls.length > 0) {
+		if (refCls != "")
 			$import(refCls);
-		}
 
 		var pg = $package(npkg);
 		// 如果用户自己定义了构造器，则使用用户定义的构造器
@@ -408,7 +398,6 @@ var $extend;
 		}
 		// 处理组件注入
 
-		return pg[name];
 	}
 
 	$package = function(ns, get) {
@@ -462,33 +451,4 @@ var $extend;
 	}
 })(this);
 
-// 反序列化 对象转bean
-var $deserialize;
-(function() {
-	$deserialize = function(obj, data) {
-		if ($tool.isFunction(obj))
-			obj = new obj();
-		else if ($tool.isString(obj))
-			obj = new $package(entityClass, true)();
-		// 赋值
-		for ( var k in data) {
-			var value = data[k];
-			if ($tool.isString(obj[k]) && obj[k].lenght > 6 && obj[k].substring(0, 6) == "$type:")
-				value = $deserialize(obj[k].substring(6, obj[k].length), value);
-			var set = "set" + k.replace(/(\w)/, function(v) {
-				return v.toUpperCase()
-			});
-			if ($tool.isFunction(obj[set])) {
-				obj[set](value);
-			} else {
-				obj[k] = value;
-			}
-		}
-
-		for ( var k in obj) {
-			if ($tool.isString(obj[k]) && obj[k].lenght > 6 && obj[k].substring(0, 6) == "$type:")
-				obj[k] = null;
-		}
-		return obj;
-	}
-})(this);
+// 后续的jsonp处理模块(待开发)
